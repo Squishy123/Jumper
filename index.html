@@ -22,7 +22,7 @@
       preload() {
         this.vx = 0;
         this.vy = 0;
-        this.ax = 5;
+        this.ax = 1;
         this.ay = -2.5;
 
         this.grounded = false;
@@ -46,6 +46,7 @@
       }
 
       update() {
+        //400 is the stage height for example
         if (this.y >= 400) {
           this.grounded = true;
         } else this.grounded = false;
@@ -60,12 +61,20 @@
 
         //Jump
         if (this.grounded)
-          if (this.inputHandler.keys[32])
+          if (this.inputHandler.keys[87])
             this.vy += 40;
+
+        //movement
+        if (this.inputHandler.keys[65]) this.vx -= this.ax;
+        if (this.inputHandler.keys[68]) this.vx += this.ax;
       }
     }
 
     let main = new Stage(document.getElementById('stage'));
+    main.styleElement({
+      "position": 'absolute',
+      "background-color": '#808080',
+    });
     main.start(60, 60);
     main.addActor(new Jumper(), {
       x: 100,
