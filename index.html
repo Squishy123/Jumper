@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <title>Silk | A Utility Library</title>
+  <link rel="shortcut icon" href="/silk/res/silk-logo.png">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+</head>
+
+<body>
+  <h3 id="fps"></h3>
+  <div id="stage"></div>
+  <script src="silk.min.js"></script>
+  <script>
+    class Jumper extends Actor {
+      constructor() {
+        super(document.createElement('div'));
+      }
+
+      preload() {
+        this.vx = 0;
+        this.vy = 0;
+        this.ax = 5;
+        this.ay = -2.5;
+
+        this.grounded = false;
+        this.jump = false;
+
+        this.styleElement({
+          "position": 'absolute',
+          "background-color": '#67D9D8',
+        });
+
+        this.setBounds({
+          width: 50,
+          height: 50
+        });
+
+        this.inputHandler = new InputHandler();
+        this.inputHandler.targetEvents(document, {
+          keydown: true,
+          keyup: true
+        });
+      }
+
+      update() {
+        if (this.y >= 400) {
+          this.grounded = true;
+        } else this.grounded = false;
+
+        if (!this.grounded) this.vy += this.ay;
+        this.setBounds({
+          x: this.x + this.vx,
+          y: this.y - this.vy
+        });
+
+        if (this.grounded) this.vy = 0;
+
+        //Jump
+        if (this.grounded)
+          if (this.inputHandler.keys[32])
+            this.vy += 40;
+      }
+    }
+
+    let main = new Stage(document.getElementById('stage'));
+    main.start(60, 60);
+    main.addActor(new Jumper(), {
+      x: 100,
+      y: 200
+    });
+  </script>
+</body>
+
+</html>
